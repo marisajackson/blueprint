@@ -1,0 +1,5 @@
+[
+  {"name":"kitchen", "beginX":"1", "beginY":"1", "endX":"2", "endY":"2", "floorId":"b123456789abcdef01234568"},
+  {"name":"closet", "beginX":"2", "beginY":"1", "endX":"3", "endY":"2", "floorId":"a123456789abcdef01234738"},
+  {"name":"den", "beginX":"1", "beginY":"2", "endX":"3", "endY":"3", "floorId":"a123456789abcdef01234812"}
+]

@@ -1,0 +1,9 @@
+extends ../shared/template
+
+block content
+
+  form(method='post', action='/floors', enctype='multipart/form-data')
+    input(name='name')
+    input(name='rate')
+    input(type='file', name='photo')
+    button Button

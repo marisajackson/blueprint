@@ -1,0 +1,8 @@
+extends ../shared/template
+
+block content
+
+  ul
+    each floor in floors
+      li= floor.name
+      img(src=floor.photo)
