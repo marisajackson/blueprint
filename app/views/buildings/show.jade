@@ -1,0 +1,20 @@
+extends ../shared/template
+
+block content
+
+  h1= building.name
+  h2 Cost: $#{rate}
+
+  button#create-room Create Room
+
+  select#floors
+    option Select a Floor
+    each floor in floors
+      option(data-img=floor.photo, value=floor._id)= floor.name
+
+
+  table#layout
+    - for(var i = 0; i < building.x; i++)
+      tr
+        - for(var j = 0; j < building.y; j++)
+          td(data-x=i, data-y=j)

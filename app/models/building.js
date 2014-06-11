@@ -3,6 +3,7 @@ var traceur = require('traceur');
 var Base = traceur.require(__dirname + '/base.js');
 var Mongo = require('mongodb');
 var Room = traceur.require(__dirname + '/room.js');
+var Location = traceur.require(__dirname + '/location.js');
 
 class Building{
   createRoom(obj, fn){
@@ -10,6 +11,14 @@ class Building{
       this.rooms.push(r);
     });
     fn(this);
+  }
+
+
+  cost(fn){
+    Location.findById(this.locationId, loc=>{
+      var rate = loc.rate * this.x * this.y;
+      fn(rate);
+    });
   }
 
   static create(obj, fn){
