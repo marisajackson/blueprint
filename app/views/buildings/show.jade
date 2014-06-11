@@ -3,7 +3,7 @@ extends ../shared/template
 block content
 
   h1= building.name
-  h2 Cost: $#{rate}
+  h2#cost Cost: $#{rate}
 
   button#create-room Create Room
 
@@ -11,10 +11,12 @@ block content
     option Select a Floor
     each floor in floors
       option(data-img=floor.photo, value=floor._id)= floor.name
+  input#name(type='text')
+  button#save-room Save Room
 
 
-  table#layout
+  table#building(data-id=building._id)
     - for(var i = 0; i < building.x; i++)
       tr
         - for(var j = 0; j < building.y; j++)
-          td(data-x=i, data-y=j)
+          td.cell(data-x=i, data-y=j)

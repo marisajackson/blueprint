@@ -2,8 +2,10 @@ var buildingCollection = global.nss.db.collection('buildings');
 var traceur = require('traceur');
 var Base = traceur.require(__dirname + '/base.js');
 var Mongo = require('mongodb');
+var async = require('async');
 var Room = traceur.require(__dirname + '/room.js');
 var Location = traceur.require(__dirname + '/location.js');
+var Floor = traceur.require(__dirname + '/floor.js');
 
 class Building{
   createRoom(obj, fn){
@@ -13,12 +15,30 @@ class Building{
     fn(this);
   }
 
+  save(fn){
+    buildingCollection.save(this, ()=>{});
+  }
+
 
   cost(fn){
     Location.findById(this.locationId, loc=>{
       var rate = loc.rate * this.x * this.y;
-      fn(rate);
+
+        async.map(this.rooms, findFloors, function(err, rooms) {
+          rate += rooms.reduce((acc, room)=>{
+            var sqft = (room.end.x + 1 - room.begin.x) * (room.end.y + 1 - room.begin.y);
+            return acc + (sqft * room.floor.rate);
+          }, 0);
+          fn(rate);
+        });
     });
+
+    function findFloors(room, fn){
+      Floor.findById(room.floorId, floor=>{
+        room.floor = floor;
+        fn(null, room);
+      });
+    }
   }
 
   static create(obj, fn){

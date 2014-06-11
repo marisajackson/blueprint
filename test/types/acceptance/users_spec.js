@@ -117,19 +117,19 @@ describe('users', function(){
     });
   });
 
-  // describe('POST /logout', function(){
-  //   it('should logout the existing user', function(done){
-  //     request(app)
-  //     .post('/logout')
-  //     .send('email=sue@aol.com')
-  //     .send('password=abcd')
-  //     .end(function(err, res){
-  //       expect(res.status).to.equal(302);
-  //       expect(res.headers['set-cookie']).to.not.be.ok;
-  //       expect(res.headers.location).to.equal('/');
-  //       done();
-  //     });
-  //   });
-  // });
+  describe('POST /logout', function(){
+    it('should logout the existing user', function(done){
+      request(app)
+      .post('/logout')
+      .send('email=sue@aol.com')
+      .send('password=abcd')
+      .end(function(err, res){
+        expect(res.status).to.equal(302);
+        expect(res.headers['set-cookie']).to.be.ok;
+        expect(res.headers.location).to.equal('/login');
+        done();
+      });
+    });
+  });
 
 });

@@ -10,11 +10,21 @@ var Floor = traceur.require(__dirname + '/../models/Floor.js');
 exports.new = (req, res)=>{
   if(res.locals.user){
     Location.findAll(locations=>{
-      res.render('buildings/new', {locations: locations, });
+      res.render('buildings/new', {locations: locations});
     });
   } else {
     res.redirect('/');
   }
+};
+
+exports.update = (req, res)=>{
+  Building.findById(req.params.id, building=>{
+    building.createRoom(req.body, newBuilding=>{
+      newBuilding.cost(rate=>{
+        res.send({cost:rate});
+      });
+    });
+  });
 };
 
 exports.create = (req, res)=>{
@@ -32,7 +42,7 @@ exports.show = (req, res)=>{
   Floor.findAll(floors=>{
     Building.findById(req.params.id, building=>{
       building.cost(rate=>{
-        res.render('buildings/show', {building: building, rate:rate, floors: floors});
+        res.render('buildings/show', {building: building, cost:rate, floors: floors});
       });
     });
   });

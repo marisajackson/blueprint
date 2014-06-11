@@ -27,6 +27,7 @@ function load(app, fn){
   app.get('/buildings/new', dbg, buildings.new);
   app.post('/buildings', dbg, buildings.create);
   app.get('/buildings/:id', dbg, buildings.show);
+  app.put('/buildings/:id/rooms', dbg, buildings.update);
 
   app.get('/login', dbg, users.new);
   app.post('/login', dbg, users.login);

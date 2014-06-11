@@ -1,35 +1,64 @@
+/* jshint unused: false*/
 (function(){
   'use strict';
 
   $(document).ready(init);
 
-  // var floor;
-  var start;
+  var begin, end;
 
   function init(){
     $('#create-room').click(createRoom);
+    $('#save-room').click(saveRoom);
+  }
+
+  function saveRoom(){
+    var id = $('#buliding').data('id');
+    var name = $('#name').val();
+    var floorId = $('#floors').val();
+    $.ajax({
+      url: `/buildings/${id}/rooms`,
+      type: 'put',
+      data: {name:name, begin:begin, end:end, floorId: floorId},
+      dataType: 'json',
+      success: data => {
+        $('#cost').text(`Cost: $${data}`);
+      }
+    });
   }
 
   function createRoom(){
-    $('td').click(startFloor);
+    begin = end = null;
+    $('#building').on('click', '.cell', startFloor);
   }
 
   function startFloor(){
-    start = $(this).data();
-    $('td').hover(dropFloor);
+    begin = {x:$(this).data('x')*1, y:$(this).data('y')*1};
+    $('#building').off('click');
+    $('#building').on('mouseenter', '.cell', fillIn);
   }
 
-  function dropFloor(){
-    var img = $('#floors :selected').attr('data-img');
-    $(this).css('background-image', 'url('+img+')');
-    $('td').mouseup(fillIn);
+
+  function selectEnd(){
+    end = {x:$(this).data('x')*1, y:$(this).data('y')*1};
+    $('#building').off('click');
+    $('#building').off('mouseenter');
   }
 
   function fillIn(){
-    var end = $(this).data();
-    for(var i = start.x; i < end.x; i++){
-      console.log(i);
+    $('#building').on('click', '.cell', selectEnd);
+    $('.temp').css('background-image', 'none');
+    var temp = {x:$(this).data('x')*1, y:$(this).data('y')*1};
+    var img = $('#floors option:selected').data('img');
+    var selectors = [];
+
+   for(var y=begin.y; y<=temp.y; y++){
+     for(var x=begin.x; x<=temp.x; x++){
+       selectors.push(`.cell[data-x=${x}][data-y=${y}]`);
+      }
     }
+
+    var selector = selectors.join(', ');
+    $(selector).addClass('temp').css('background-image', `url(${img})`);
   }
 
 })();
